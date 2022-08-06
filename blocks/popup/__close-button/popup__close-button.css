@@ -1,0 +1,21 @@
+.poup__close-button {
+  width: 32px;
+  height: 32px;
+  background-color: #000;
+  background-image: url(../../../images/poup__closebutton.svg);
+  background-position: center;
+  background-size: contain;
+  position: absolute;
+  border: none;
+  top: -40px;
+  right: -40px;
+}
+
+@media screen and (max-width: 767px) {
+  .poup__close-button {
+    width: 20px;
+    height: 20px;
+    top: -36px;
+    right: 0px;
+  }
+}
