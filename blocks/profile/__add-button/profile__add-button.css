@@ -8,4 +8,18 @@
   background-position: center;
   background-size: 22px;
   align-self: center;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 880px) {
+  .profile__add-button {
+    margin-right: 27px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .profile__add-button {
+    margin: 36px auto;
+    width: 282px;
+  }
 }

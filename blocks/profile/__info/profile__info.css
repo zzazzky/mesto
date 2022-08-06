@@ -9,3 +9,23 @@
   justify-content: space-between;
   column-gap: 18px;
 }
+
+@media screen and (max-width: 880px) {
+  .profile__info {
+    margin-left: 27px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .profile__info {
+    grid-template-rows: repeat(2, auto);
+    grid-template-columns: repeat(3, auto);
+    grid-template-areas:
+    "avatar avatar"
+    "name edit-button"
+    "description description";
+    justify-content: center;
+    justify-items: center;
+    column-gap: 0;
+  }
+}

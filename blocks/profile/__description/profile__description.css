@@ -10,3 +10,10 @@
   grid-area: description;
   align-self: start;
 }
+
+@media screen and (max-width: 767px) {
+  .profile__description {
+    font-size: 14px;
+    line-height: 121.5%;
+  }
+}
