@@ -1,34 +1,22 @@
 //открытие попапа
 let editButton = document.querySelector('.profile .profile__edit-button');
 let popup = document.querySelector('.popup')
-editButton.addEventListener('click', openPopup);
+let closeButton = document.querySelector('.popup__close-button');
+let formElement = document.querySelector('.popup__form');
+let profileName = document.querySelector('.profile__name');
+let profileDescription = document.querySelector('.profile__description');
+let nameInput = document.querySelector('.popup__input-box_content_name');
+let jobInput = document.querySelector('.popup__input-box_content_description');
 
 function openPopup() {
   popup.classList.add('popup_opened');
+  nameInput.value = profileName.textContent;
+  jobInput.value = profileDescription.textContent;
 }
 
-//редактирование профайла
-let formElement = document.querySelector('.popup__container');
-let profileName = document.querySelector('.profile__name');
-let profileDescription = document.querySelector('.profile__description');
-let nameInput = document.querySelector('.popup__name');
-let jobInput = document.querySelector('.popup__description');
-
-formElement.addEventListener('submit', formSubmitHandler);
-
-//добавила, поскольку через submit не сохраняет изменения по нажатию кнопки Enter
-nameInput.addEventListener('keydown', function(evt) {
-  if (evt.keyCode === 13) {
-    formSubmitHandler(evt);
-  }
-});
-
-//добавила, поскольку через submit не сохраняет изменения по нажатию кнопки Enter
-jobInput.addEventListener('keydown', function(evt) {
-  if (evt.keyCode === 13) {
-    formSubmitHandler(evt);
-  }
-});
+function closePopup() {
+  popup.classList.remove('popup_opened');
+}
 
 function formSubmitHandler(evt) {
   evt.preventDefault();
@@ -37,12 +25,8 @@ function formSubmitHandler(evt) {
   profileDescription.textContent = `${jobInput.value}`;
 }
 
-//закрытие попапа без сохранения
-let closeButton = document.querySelector('.poup__close-button');
-
+editButton.addEventListener('click', openPopup);
 closeButton.addEventListener('click', closePopup);
+formElement.addEventListener('submit', formSubmitHandler);
 
-function closePopup(evt) {
-  evt.preventDefault();
-  popup.classList.remove('popup_opened');
-}
+
