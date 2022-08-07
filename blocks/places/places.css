@@ -1,8 +1,9 @@
 .places {
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 282px);
-  row-gap: 20px;
-  column-gap: 17px;
-  justify-content: center;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
 }

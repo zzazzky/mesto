@@ -1,12 +1,13 @@
 .profile__description {
   margin: 0;
   padding: 0;
-  font-family: 'Inter';
-  font-style: normal;
   font-weight: 400;
   font-size: 18px;
   line-height: 122.25%;
   color: #FFF;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   grid-area: description;
   align-self: start;
 }

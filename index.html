@@ -24,48 +24,50 @@
       <button class="profile__add-button button"></button>
     </section>
     <section class="places" aria-label="Фотографии">
-      <div class="place">
-        <img class="place__image" src="./images/place__balt-more.jpg" alt="Фотография Балтийского моря">
-        <div class="place__caption">
-          <p class="place__text">Балтийское море</p>
-          <div class="place__like"></div>            
-        </div>
-      </div>
-      <div class="place">
-        <img class="place__image" src="./images/place__dombay.jpg" alt="Фотография горы Домбай">
-        <div class="place__caption">
-          <p class="place__text">Домбай</p>
-          <div class="place__like"></div>            
-        </div>
-      </div>
-      <div class="place">
-        <img class="place__image" src="./images/place__elbrus.jpg"  alt="Фотография горы Эльбрус">
-        <div class="place__caption">
-          <p class="place__text">Эльбрус</p>
-          <div class="place__like"></div>            
-        </div>
-      </div>
-      <div class="place">
-        <img class="place__image" src="./images/place__kamchatka.jpg"  alt="Фотография вулканов на Камчатке">
-        <div class="place__caption">
-          <p class="place__text">Камчатский край</p>
-          <div class="place__like"></div>            
-        </div>
-      </div>
-      <div class="place">
-        <img class="place__image" src="./images/place__karachevsk.jpg" alt="Фотография замка в городе Карачаевск">
-        <div class="place__caption">
-          <p class="place__text">Карачаево-Черкессия</p>
-          <div class="place__like"></div>            
-        </div>
-      </div>
-      <div class="place">
-        <img class="place__image" src="./images/place__sachalin.jpg" alt="Фотография природы на острове Сахалин">
-        <div class="place__caption">
-          <p class="place__text">Сахалин</p>
-          <div class="place__like"></div>            
-        </div>
-      </div>
+      <ul class="place__list">
+        <li class="place">
+          <img class="place__image" src="./images/place__balt-more.jpg" alt="Фотография Балтийского моря">
+          <div class="place__caption">
+            <p class="place__text">Балтийское море</p>
+            <button class="place__like button"></button>            
+          </div>
+        </li>
+        <li class="place">
+          <img class="place__image" src="./images/place__dombay.jpg" alt="Фотография горы Домбай">
+          <div class="place__caption">
+            <p class="place__text">Домбай</p>
+            <button class="place__like button"></button>            
+          </div>
+        </li>
+        <li class="place">
+          <img class="place__image" src="./images/place__elbrus.jpg"  alt="Фотография горы Эльбрус">
+          <div class="place__caption">
+            <p class="place__text">Эльбрус</p>
+            <button class="place__like button"></button>           
+          </div>
+        </li>
+        <li class="place">
+          <img class="place__image" src="./images/place__kamchatka.jpg"  alt="Фотография вулканов на Камчатке">
+          <div class="place__caption">
+            <p class="place__text">Камчатский край</p>
+            <button class="place__like button"></button>           
+          </div>
+        </li>
+        <li class="place">
+          <img class="place__image" src="./images/place__karachevsk.jpg" alt="Фотография замка в городе Карачаевск">
+          <div class="place__caption">
+            <p class="place__text">Карачаево-Черкессия</p>
+            <button class="place__like button"></button>           
+          </div>
+        </li>
+        <li class="place">
+          <img class="place__image" src="./images/place__sachalin.jpg" alt="Фотография природы на острове Сахалин">
+          <div class="place__caption">
+            <p class="place__text">Сахалин</p>
+            <button class="place__like button"></button>           
+          </div>
+        </li>
+    </ul>
     </section>
     <footer class="footer" aria-label="Подвал сайта, информация о правообладателе">
     <p class="footer__copyright" lang="en">© 2020 Mesto Russia</p>
@@ -80,5 +82,6 @@
         </form>
     </section>
   </div>
+  <script src="./pages/index.js"></script>
 </body>
 </html>
