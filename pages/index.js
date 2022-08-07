@@ -1,5 +1,4 @@
-//открытие попапа
-let editButton = document.querySelector('.profile .profile__edit-button');
+let editButton = document.querySelector('.profile__edit-button');
 let popup = document.querySelector('.popup')
 let closeButton = document.querySelector('.popup__close-button');
 let formElement = document.querySelector('.popup__form');
@@ -28,5 +27,3 @@ function formSubmitHandler(evt) {
 editButton.addEventListener('click', openPopup);
 closeButton.addEventListener('click', closePopup);
 formElement.addEventListener('submit', formSubmitHandler);
-
-
