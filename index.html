@@ -26,55 +26,23 @@
       </section>
       <section class="places" aria-label="Фотографии">
         <ul class="places__list">
-          <li class="place">
-            <img class="place__image" src="./images/place__balt-more.jpg" alt="Фотография Балтийского моря">
-            <div class="place__caption">
-              <h2 class="place__text">Балтийское море</h2>
-              <button class="place__like button"></button>            
-            </div>
-          </li>
-          <li class="place">
-            <img class="place__image" src="./images/place__dombay.jpg" alt="Фотография горы Домбай">
-            <div class="place__caption">
-              <h2 class="place__text">Домбай</h2>
-              <button class="place__like button"></button>            
-            </div>
-          </li>
-          <li class="place">
-            <img class="place__image" src="./images/place__elbrus.jpg"  alt="Фотография горы Эльбрус">
-            <div class="place__caption">
-              <h2 class="place__text">Эльбрус</h2>
-              <button class="place__like button"></button>           
-            </div>
-          </li>
-          <li class="place">
-            <img class="place__image" src="./images/place__kamchatka.jpg"  alt="Фотография вулканов на Камчатке">
-            <div class="place__caption">
-              <h2 class="place__text">Камчатский край</h2>
-              <button class="place__like button"></button>           
-            </div>
-          </li>
-          <li class="place">
-            <img class="place__image" src="./images/place__karachevsk.jpg" alt="Фотография замка в городе Карачаевск">
-            <div class="place__caption">
-              <h2 class="place__text">Карачаево-Черкессия</h2>
-              <button class="place__like button"></button>           
-            </div>
-          </li>
-          <li class="place">
-            <img class="place__image" src="./images/place__sachalin.jpg" alt="Фотография природы на острове Сахалин">
-            <div class="place__caption">
-              <h2 class="place__text">Сахалин</h2>
-              <button class="place__like button"></button>           
-            </div>
-          </li>
+          <template class="places__template">
+            <li class="place">
+              <button class="place__delete button"></button>
+              <img class="place__image">
+              <div class="place__caption">
+                <h2 class="place__text"></h2>
+                <button class="place__like button"></button>           
+              </div>
+            </li>
+            </template>
         </ul>
       </section>
     </main>
     <footer class="footer" aria-label="Подвал сайта, информация о правообладателе">
     <p class="footer__copyright" lang="en">© 2020 Mesto Russia</p>
     </footer>
-    <div class="popup">
+    <div class="popup popup_type_edit-profile">
         <div class="popup__container">
           <button class="popup__close-button button" type="button"></button>
           <form class="popup__form" name="editProfile">
@@ -86,6 +54,18 @@
         </div>
       </div>
   </div>
+  <div class="popup popup_type_add-card">
+    <div class="popup__container">
+      <button class="popup__close-button button" type="button"></button>
+      <form class="popup__form" name="add-place">
+        <h2 class="popup__title">Новое место</h2>
+        <input class="popup__input-box popup__input-box_content_place-name" type="text" name="place-name" placeholder="Название">
+        <input class="popup__input-box popup__input-box_content_place-link" type="text" name="place-link" placeholder="Ссылка на картинку">
+        <button class="popup__save-button button" type="submit">Сохранить</button>
+      </form>
+    </div>
+  </div>
+</div>
   <script src="./pages/index.js"></script>
 </body>
 </html>
