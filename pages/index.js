@@ -1,5 +1,52 @@
-//Обработчик формы edit-profile
+const placesContainer = document.querySelector('.places__list');
 
+//кнопка закрытия попапов
+function closeForm(evt) {
+  evt.target.closest('.popup').classList.remove('popup_opened');
+}
+
+//кнопка лайка
+function switchLike (evt) {
+  evt.target.classList.toggle('place__like_active');
+}
+
+function listenLikeClick (element) {
+  element.addEventListener('click', switchLike);
+}
+
+//кнопка удаления
+function deleteCard(evt) {
+  const deletedCard = evt.target.closest('.place');
+  deletedCard.remove();
+}
+
+function listenDeleteClick(element) {
+  element.addEventListener('click', deleteCard);
+}
+
+//открытие картинки
+const imagePopup = document.querySelector('.popup_type_picture');
+const imagePopupCloseButton = imagePopup.querySelector('.popup__close-button');
+
+function openImage(evt) {
+  const promoImage = evt.target;
+  const bigImage = imagePopup.querySelector('.popup__image');
+  const promoCaption = evt.target.closest('.place').querySelector('.place__text');
+  const bigCaption = imagePopup.querySelector('.popup__caption');
+
+  imagePopup.classList.add('popup_opened');
+  bigImage.src = promoImage.src;
+  bigCaption.textContent = promoCaption.textContent;
+}
+
+function listenImageClick(element) {
+  element.addEventListener('click', openImage);
+}
+
+//закрытие попапа с картинкой
+imagePopupCloseButton.addEventListener('click', closeForm);
+
+//обработчик формы edit-profile
 const editButton = document.querySelector('.profile__edit-button');
 const editForm = document.querySelector('.popup_type_edit-profile');
 const closeEditFormButton = editForm.querySelector('.popup__close-button');
@@ -15,10 +62,6 @@ function openEditForm() {
   jobInput.value = profileDescription.textContent;
 }
 
-function closeEditForm() {
-  editForm.classList.remove('popup_opened');
-}
-
 function editFormSubmitHandler(evt) {
   evt.preventDefault();
   editForm.classList.remove('popup_opened');
@@ -27,10 +70,10 @@ function editFormSubmitHandler(evt) {
 }
 
 editButton.addEventListener('click', openEditForm);
-closeEditFormButton.addEventListener('click', closeEditForm);
+closeEditFormButton.addEventListener('click', closeForm);
 editFormElement.addEventListener('submit', editFormSubmitHandler);
 
-//Открытие и закрытие формы добавления карточек
+//открытие и закрытие формы добавления карточек
 const addButton = document.querySelector('.profile__add-button');
 const addForm = document.querySelector('.popup_type_add-card');
 const closeAddFormButton = addForm.querySelector('.popup__close-button');
@@ -39,69 +82,34 @@ function openAddForm() {
   addForm.classList.add('popup_opened');
 }
 
-function closeAddForm() {
-  addForm.classList.remove('popup_opened');
-}
-
 addButton.addEventListener('click', openAddForm);
-closeAddFormButton.addEventListener('click', closeAddForm);
+closeAddFormButton.addEventListener('click', closeForm);
 
-//Добавление карточки пользователем
-const placesContainer = document.querySelector('.places__list');
-const placeNameInput = addForm.querySelector('.popup__input-box_content_place-name');
-const placeLinkInput = addForm.querySelector('.popup__input-box_content_place-link');
-
-function addNewCard(evt) {
-  evt.preventDefault();
-  addForm.classList.remove('popup_opened');
-
-  const cardTemplate = document.querySelector('.places__template').content;
-  const cardPlace =  cardTemplate.querySelector('.place').cloneNode(true);
-  const cardImage = cardPlace.querySelector('.place__image');
-  const cardText = cardPlace.querySelector('.place__text');
-  const cardLike = cardPlace.querySelector('.place__like');
-  const cardDelete = cardPlace.querySelector('.place__delete');
-  cardImage.src = placeLinkInput.value;
-  cardText.textContent = placeNameInput.value;
-
-  placesContainer.prepend(cardPlace);
-  listenLikeClick(cardLike);
-  listenDeleteClick(cardDelete);
-}
-
-addForm.addEventListener('submit', addNewCard);
-
-//Добавление карточек по дефолту
+//добавление карточек по дефолту
 const initialCards = [
   {
     name: 'Балтийское море',
     link: './images/place__balt-more.jpg',
-    description: 'Фотография Балтийского моря'
   },
   {
     name: 'Домбай',
     link: './images/place__dombay.jpg',
-    description: 'Фотография горы Домбай'
   },
   {
     name: 'Эльбрус',
     link: './images/place__elbrus.jpg',
-    description: 'Фотография горы Эльбрус'
   },
   {
     name: 'Камчатский край',
     link: './images/place__kamchatka.jpg',
-    description: 'Фотография вулканов на Камчатке'
   },
   {
     name: 'Карачаево-Черкессия',
     link: './images/place__karachevsk.jpg',
-    description: 'Фотография замка в городе Карачаевск'
   },
   {
     name: 'Сахалин',
     link: './images/place__sachalin.jpg',
-    description: 'Фотография природы на острове Сахалин'
   },
 ];
 
@@ -110,42 +118,31 @@ function addCard(element) {
   const cardPlace =  cardTemplate.querySelector('.place').cloneNode(true);
   const cardImage = cardPlace.querySelector('.place__image');
   const cardText = cardPlace.querySelector('.place__text');
+  const cardLike = cardPlace.querySelector('.place__like');
+  const cardDelete = cardPlace.querySelector('.place__delete');
 
   cardImage.src = element.link;
   cardText.textContent = element.name;
 
   placesContainer.prepend(cardPlace);
+  listenLikeClick(cardLike);
+  listenDeleteClick(cardDelete);
+  listenImageClick(cardImage);
 }
 
 initialCards.forEach(addCard);
 
-//кнопка лайка
+//Добавление карточки пользователем
+const placeNameInput = addForm.querySelector('.popup__input-box_content_place-name');
+const placeLinkInput = addForm.querySelector('.popup__input-box_content_place-link');
 
-const likeButtons = placesContainer.querySelectorAll('.place__like');
-const likeButtonsArray = Array.from(likeButtons);
+function addNewCard(evt) {
+  evt.preventDefault();
+  addForm.classList.remove('popup_opened');
 
-function switchLike (evt) {
-  evt.target.classList.toggle('place__like_active');
+  initialCards.unshift({name: `${placeNameInput.value}`, link: `${placeLinkInput.value}`});
+
+  addCard(initialCards[0]);
 }
 
-function listenLikeClick (element) {
-  element.addEventListener('click', switchLike);
-}
-
-likeButtonsArray.forEach(listenLikeClick);
-
-//кнопка удаления
-
-const deleteButtons = placesContainer.querySelectorAll('.place__delete');
-const deleteButtonsArray = Array.from(deleteButtons);
-
-function deleteCard(evt) {
-  const deletedCard = evt.target.closest('.place');
-  deletedCard.remove();
-}
-
-function listenDeleteClick(element) {
-element.addEventListener('click', deleteCard);
-}
-
-deleteButtons.forEach(listenDeleteClick);
+addForm.addEventListener('submit', addNewCard);
