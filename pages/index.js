@@ -1,11 +1,13 @@
 const placesContainer = document.querySelector('.places__list');
 
-//кнопка закрытия попапов
+//Кнопка закрытия попапов
+
 function closeForm(evt) {
   evt.target.closest('.popup').classList.remove('popup_opened');
 }
 
-//кнопка лайка
+//Кнопка лайка
+
 function switchLike (evt) {
   evt.target.classList.toggle('place__like_active');
 }
@@ -14,7 +16,8 @@ function listenLikeClick (element) {
   element.addEventListener('click', switchLike);
 }
 
-//кнопка удаления
+//Кнопка удаления
+
 function deleteCard(evt) {
   const deletedCard = evt.target.closest('.place');
   deletedCard.remove();
@@ -24,7 +27,8 @@ function listenDeleteClick(element) {
   element.addEventListener('click', deleteCard);
 }
 
-//открытие картинки
+//Открытие картинки
+
 const imagePopup = document.querySelector('.popup_type_picture');
 const imagePopupCloseButton = imagePopup.querySelector('.popup__close-button');
 
@@ -43,10 +47,12 @@ function listenImageClick(element) {
   element.addEventListener('click', openImage);
 }
 
-//закрытие попапа с картинкой
+//Закрытие попапа с картинкой
+
 imagePopupCloseButton.addEventListener('click', closeForm);
 
-//обработчик формы edit-profile
+//Обработчик формы edit-profile
+
 const editButton = document.querySelector('.profile__edit-button');
 const editForm = document.querySelector('.popup_type_edit-profile');
 const closeEditFormButton = editForm.querySelector('.popup__close-button');
@@ -73,7 +79,8 @@ editButton.addEventListener('click', openEditForm);
 closeEditFormButton.addEventListener('click', closeForm);
 editFormElement.addEventListener('submit', editFormSubmitHandler);
 
-//открытие и закрытие формы добавления карточек
+//Открытие и закрытие формы добавления карточек
+
 const addButton = document.querySelector('.profile__add-button');
 const addForm = document.querySelector('.popup_type_add-card');
 const closeAddFormButton = addForm.querySelector('.popup__close-button');
@@ -85,7 +92,8 @@ function openAddForm() {
 addButton.addEventListener('click', openAddForm);
 closeAddFormButton.addEventListener('click', closeForm);
 
-//добавление карточек по дефолту
+//Добавление карточек по дефолту
+
 const initialCards = [
   {
     name: 'Балтийское море',
@@ -133,6 +141,7 @@ function addCard(element) {
 initialCards.forEach(addCard);
 
 //Добавление карточки пользователем
+
 const placeNameInput = addForm.querySelector('.popup__input-box_content_place-name');
 const placeLinkInput = addForm.querySelector('.popup__input-box_content_place-link');
 
