@@ -25,11 +25,12 @@ const cards = [
   },
 ];
 
-const cardsRendered = [];
 const placesContainer = document.querySelector('.places__list');
 
 const popupImage = document.querySelector('.popup_type_picture');
 const buttonClosePopupImage = popupImage.querySelector('.popup__close-button');
+const bigImage = popupImage.querySelector('.popup__image');
+const bigCaption = popupImage.querySelector('.popup__caption');
 
 const buttonEditProfile = document.querySelector('.profile__edit-button');
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
@@ -47,6 +48,8 @@ const buttonCloseAddForm = popupAddCard.querySelector('.popup__close-button');
 const placeNameInput = popupAddCard.querySelector('.popup__input-box_content_place-name');
 const placeLinkInput = popupAddCard.querySelector('.popup__input-box_content_place-link');
 
+const cardTemplate = document.querySelector('.places__template').content;
+
 function openPopup(popup) {
   popup.classList.add('popup_opened');
 }
@@ -55,11 +58,9 @@ function closePopup(popup) {
   popup.classList.remove('popup_opened');
 }
 
-function openImage(evt) {
+function handleImageClick(evt) {
   const promoImage = evt.target;
-  const bigImage = popupImage.querySelector('.popup__image');
   const promoCaption = evt.target.closest('.place').querySelector('.place__text');
-  const bigCaption = popupImage.querySelector('.popup__caption');
 
   openPopup(popupImage);
   bigImage.src = promoImage.src;
@@ -67,25 +68,13 @@ function openImage(evt) {
   bigCaption.textContent = promoCaption.textContent;
 }
 
-function switchLike (evt) {
+function handleLikeClick(evt) {
   evt.target.classList.toggle('place__like_active');
 }
 
-function handleLikeClick (element) {
-  element.addEventListener('click', switchLike);
-}
-
-function deleteCard(evt) {
+function handleDeleteClick(evt) {
   const deletedCard = evt.target.closest('.place');
   deletedCard.remove();
-}
-
-function handleDeleteClick(element) {
-  element.addEventListener('click', deleteCard);
-}
-
-function handleImageClick(element) {
-  element.addEventListener('click', openImage);
 }
 
 function handleEditForm(evt) {
@@ -95,37 +84,40 @@ function handleEditForm(evt) {
   profileDescription.textContent = jobInput.value;
 }
 
-function renderCard(element) {
-  const cardTemplate = document.querySelector('.places__template').content;
+function createCard(element) {
   const cardPlace =  cardTemplate.querySelector('.place').cloneNode(true);
-  const cardImage = cardPlace.querySelector('.place__image');
-  const cardText = cardPlace.querySelector('.place__text');
   const cardLike = cardPlace.querySelector('.place__like');
   const cardDelete = cardPlace.querySelector('.place__delete');
-
+  const cardImage = cardPlace.querySelector('.place__image');
+  const cardText = cardPlace.querySelector('.place__text');
+  
   cardImage.src = element.link;
   cardImage.alt = element.name;
   cardText.textContent = element.name;
 
-  handleLikeClick(cardLike);
-  handleDeleteClick(cardDelete);
-  handleImageClick(cardImage);
+  cardImage.addEventListener('click', handleImageClick);
+  cardLike.addEventListener('click', handleLikeClick);
+  cardDelete.addEventListener('click', handleDeleteClick);
 
-  return cardsRendered.unshift(cardPlace);
+  return cardPlace;
 }
 
-function addCard (card) {
+function renderCard (element) {
+  const card = createCard(element)
   placesContainer.prepend(card);
 }
 
-function addNewCard(evt) {
-  evt.preventDefault();
-  closePopup(popupAddCard);
+function handleAddForm(evt) {
+  evt.preventDefault(); 
+  closePopup(popupAddCard); 
 
-  cards.unshift({name: `${placeNameInput.value}`, link: `${placeLinkInput.value}`});
-  renderCard(cards[0]);
-  addCard(cardsRendered[0]);
-}
+  const cardNew = {
+    name: `${placeNameInput.value}`, 
+    link: `${placeLinkInput.value}`
+  }; 
+
+  renderCard(cardNew); 
+  } 
 
 buttonEditProfile.addEventListener('click', function() {
   openPopup(popupEditProfile);
@@ -142,6 +134,5 @@ buttonAddCard.addEventListener('click', ()=> openPopup(popupAddCard));
 buttonCloseAddForm.addEventListener('click', ()=> closePopup(popupAddCard));
 
 cards.forEach(renderCard);
-cardsRendered.forEach(addCard);
 
-formAddCard.addEventListener('submit', addNewCard);
+formAddCard.addEventListener('submit', handleAddForm);
