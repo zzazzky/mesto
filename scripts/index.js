@@ -50,32 +50,35 @@ const placeLinkInput = popupAddCard.querySelector('.popup__input_content_place-l
 
 const cardTemplate = document.querySelector('.places__template').content;
 
-function openPopup(popup) {
-  function removeHandlers() {
-    document.removeEventListener('keydown', handleEscKeydown);
-    popup.removeEventListener('click', handleOverlayClick);
-  }
-  
-  function handleOverlayClick(evt) {
-    if (evt.target === popup) {
-      closePopup(popup);
-      removeHandlers();
-    }
-  }
-  function handleEscKeydown(evt) {
-    if (evt.key === 'Escape') {
-      closePopup(popup);
-      removeHandlers();
-    }
-  }
-  
-  popup.classList.add('popup_opened');
-  document.addEventListener('keydown', handleEscKeydown);
-  popup.addEventListener('click', handleOverlayClick);
+function removeHandlers() {
+  document.removeEventListener('keydown', handleEscKeydown);
+  popup.removeEventListener('click', handleOverlayClick);
 }
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  removeHandlers();
+}
+
+function handleOverlayClick(evt, popup) {
+  if (evt.target === popup) {
+    closePopup(popup);
+  }
+}
+function handleEscKeydown(evt, popup) {
+  if (evt.key === 'Escape') {
+    closePopup(popup);
+  }
+}
+
+function setPopupListeners (popup) {
+document.addEventListener('keydown', (evt) => handleEscKeydown(evt, popup));
+popup.addEventListener('click', (evt) => handleOverlayClick(evt, popup));
+}
+
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
+  setPopupListeners (popup);
 }
 
 function handleImageClick(evt) {
