@@ -51,7 +51,27 @@ const placeLinkInput = popupAddCard.querySelector('.popup__input_content_place-l
 const cardTemplate = document.querySelector('.places__template').content;
 
 function openPopup(popup) {
+  function removeHandlers() {
+    document.removeEventListener('keydown', handleEscKeydown);
+    popup.removeEventListener('click', handleOverlayClick);
+  }
+  
+  function handleOverlayClick(evt) {
+    if (evt.target === popup) {
+      closePopup(popup);
+      removeHandlers();
+    }
+  }
+  function handleEscKeydown(evt) {
+    if (evt.key === 'Escape') {
+      closePopup(popup);
+      removeHandlers();
+    }
+  }
+  
   popup.classList.add('popup_opened');
+  document.addEventListener('keydown', handleEscKeydown);
+  popup.addEventListener('click', handleOverlayClick);
 }
 
 function closePopup(popup) {
@@ -119,13 +139,10 @@ function handleAddForm(evt) {
   renderCard(cardNew); 
   } 
 
-  
-buttonEditProfile.addEventListener('click', function() {
-  openPopup(popupEditProfile);
-  nameInput.value = profileName.textContent; 
-  jobInput.value = profileDescription.textContent; 
-});
+nameInput.value = profileName.textContent; 
+jobInput.value = profileDescription.textContent;
 
+ buttonEditProfile.addEventListener('click', () => openPopup(popupEditProfile));
 buttonCloseEditPopup.addEventListener('click', ()=> closePopup(popupEditProfile));
 formEditProfile.addEventListener('submit', handleEditForm);
 
