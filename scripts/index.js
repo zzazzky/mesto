@@ -149,7 +149,8 @@ jobInput.value = profileDescription.textContent;
  buttonEditProfile.addEventListener('click', function () {
   openPopup(popupEditProfile);
   //заполнение инпутов данными из профиля при открытии попапа - для удаления вписанных, но не сохраненных значениях инпутов
-
+  nameInput.value = profileName.textContent; 
+  jobInput.value = profileDescription.textContent;
  });
 buttonCloseEditPopup.addEventListener('click', ()=> closePopup(popupEditProfile));
 formEditProfile.addEventListener('submit', handleEditForm);
