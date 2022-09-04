@@ -38,15 +38,15 @@ const buttonCloseEditPopup = popupEditProfile.querySelector('.popup__close-butto
 const formEditProfile = popupEditProfile.querySelector('.popup__form');
 const profileName = document.querySelector('.profile__name');
 const profileDescription = document.querySelector('.profile__description');
-const nameInput = popupEditProfile.querySelector('.popup__input-box_content_name');
-const jobInput = popupEditProfile.querySelector('.popup__input-box_content_description');
+const nameInput = popupEditProfile.querySelector('.popup__input_content_name');
+const jobInput = popupEditProfile.querySelector('.popup__input_content_description');
 
 const buttonAddCard = document.querySelector('.profile__add-button');
 const popupAddCard = document.querySelector('.popup_type_add-card');
 const formAddCard = popupAddCard.querySelector('.popup__form');
 const buttonCloseAddForm = popupAddCard.querySelector('.popup__close-button');
-const placeNameInput = popupAddCard.querySelector('.popup__input-box_content_place-name');
-const placeLinkInput = popupAddCard.querySelector('.popup__input-box_content_place-link');
+const placeNameInput = popupAddCard.querySelector('.popup__input_content_place-name');
+const placeLinkInput = popupAddCard.querySelector('.popup__input_content_place-link');
 
 const cardTemplate = document.querySelector('.places__template').content;
 
@@ -119,6 +119,7 @@ function handleAddForm(evt) {
   renderCard(cardNew); 
   } 
 
+  
 buttonEditProfile.addEventListener('click', function() {
   openPopup(popupEditProfile);
   nameInput.value = profileName.textContent; 

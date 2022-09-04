@@ -1,4 +1,4 @@
-.popup__input-box {
+.popup__input {
   padding: 0;
   display: block;
   width: 358px;
@@ -11,17 +11,17 @@
 }
 
 @media screen and (max-width: 767px) {
-  .popup__input-box {
+  .popup__input {
     width: 238px;
   }
 }
 
-.popup__input-box:first-of-type {
-  margin: 40px 0 25px 0;
+.popup__input:first-of-type {
+  margin: 40px 0 0 0;
 }
 
 @media screen and (max-width: 767px) {
-  .popup__input-box:first-of-type {
-    margin: 70px 0 25px 0;
+  .popup__input:first-of-type {
+    margin: 70px 0 0 0;
   }
 }
