@@ -50,14 +50,14 @@ const placeLinkInput = popupAddCard.querySelector('.popup__input_content_place-l
 
 const cardTemplate = document.querySelector('.places__template').content;
 
-function removeHandlers() {
+function removeHandlers(popup) {
   document.removeEventListener('keydown', handleEscKeydown);
   popup.removeEventListener('click', handleOverlayClick);
 }
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
-  removeHandlers();
+  removeHandlers(popup);
 }
 
 function handleOverlayClick(evt, popup) {
@@ -149,8 +149,7 @@ jobInput.value = profileDescription.textContent;
  buttonEditProfile.addEventListener('click', function () {
   openPopup(popupEditProfile);
   //заполнение инпутов данными из профиля при открытии попапа - для удаления вписанных, но не сохраненных значениях инпутов
-  nameInput.value = profileName.textContent; 
-  jobInput.value = profileDescription.textContent;
+
  });
 buttonCloseEditPopup.addEventListener('click', ()=> closePopup(popupEditProfile));
 formEditProfile.addEventListener('submit', handleEditForm);
