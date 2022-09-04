@@ -142,10 +142,16 @@ function handleAddForm(evt) {
   renderCard(cardNew); 
   } 
 
+  //заполнение инпутов данными из профиля при загрузке страницы - для корректной валидации формы при загрузке страницы и отображения активной кнопки
 nameInput.value = profileName.textContent; 
 jobInput.value = profileDescription.textContent;
 
- buttonEditProfile.addEventListener('click', () => openPopup(popupEditProfile));
+ buttonEditProfile.addEventListener('click', function () {
+  openPopup(popupEditProfile);
+  //заполнение инпутов данными из профиля при открытии попапа - для удаления вписанных, но не сохраненных значениях инпутов
+  nameInput.value = profileName.textContent; 
+  jobInput.value = profileDescription.textContent;
+ });
 buttonCloseEditPopup.addEventListener('click', ()=> closePopup(popupEditProfile));
 formEditProfile.addEventListener('submit', handleEditForm);
 
