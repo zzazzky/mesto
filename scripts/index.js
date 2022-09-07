@@ -1,30 +1,3 @@
-const cards = [
-  {
-    name: 'Балтийское море',
-    link: './images/place__balt-more.jpg',
-  },
-  {
-    name: 'Домбай',
-    link: './images/place__dombay.jpg',
-  },
-  {
-    name: 'Эльбрус',
-    link: './images/place__elbrus.jpg',
-  },
-  {
-    name: 'Камчатский край',
-    link: './images/place__kamchatka.jpg',
-  },
-  {
-    name: 'Карачаево-Черкессия',
-    link: './images/place__karachevsk.jpg',
-  },
-  {
-    name: 'Сахалин',
-    link: './images/place__sachalin.jpg',
-  },
-];
-
 const placesContainer = document.querySelector('.places__list');
 
 const popupImage = document.querySelector('.popup_type_picture');
@@ -49,31 +22,31 @@ const placeNameInput = popupAddCard.querySelector('.popup__input_content_place-n
 const placeLinkInput = popupAddCard.querySelector('.popup__input_content_place-link');
 
 const cardTemplate = document.querySelector('.places__template').content;
+const cardTemplateContent = cardTemplate.querySelector('.place');
 
-function removeHandlers(popup) {
+function removeHandler() {
   document.removeEventListener('keydown', handleEscKeydown);
-  popup.removeEventListener('click', handleOverlayClick);
 }
 
-function closePopup(popup) {
-  popup.classList.remove('popup_opened');
-  removeHandlers(popup);
+function closePopup() {
+  document.querySelector('.popup_opened').classList.remove('popup_opened');
+  removeHandler();
 }
 
-function handleOverlayClick(evt, popup) {
-  if (evt.target === popup) {
-    closePopup(popup);
+function handleOverlayClick(evt) {
+  if (evt.target === evt.currentTarget) {
+    closePopup();
   }
 }
-function handleEscKeydown(evt, popup) {
+function handleEscKeydown(evt) {
   if (evt.key === 'Escape') {
-    closePopup(popup);
+    closePopup();
   }
 }
 
 function setPopupListeners (popup) {
-document.addEventListener('keydown', (evt) => handleEscKeydown(evt, popup));
-popup.addEventListener('click', (evt) => handleOverlayClick(evt, popup));
+  document.addEventListener('keydown', handleEscKeydown);
+  popup.addEventListener('click', handleOverlayClick);
 }
 
 function openPopup(popup) {
@@ -81,85 +54,84 @@ function openPopup(popup) {
   setPopupListeners (popup);
 }
 
-function handleImageClick(evt) {
-  const promoImage = evt.target;
-  const promoCaption = evt.target.closest('.place').querySelector('.place__text');
+function handleImageClick(cardImage, cardText) {
+  bigImage.src = cardImage.src;
+  bigImage.alt = cardImage.alt;
+  bigCaption.textContent = cardText.textContent;
 
   openPopup(popupImage);
-  bigImage.src = promoImage.src;
-  bigImage.alt = promoImage.alt;
-  bigCaption.textContent = promoCaption.textContent;
 }
 
-function handleLikeClick(evt) {
-  evt.target.classList.toggle('place__like_active');
+function handleLikeClick(buttonLike) {
+  buttonLike.classList.toggle('place__like_active');
 }
 
-function handleDeleteClick(evt) {
-  const deletedCard = evt.target.closest('.place');
+function handleDeleteClick(buttonDelete) {
+  const deletedCard = buttonDelete.closest('.place');
   deletedCard.remove();
 }
 
-function handleEditForm(evt) {
+function handleEditFormSubmit(evt) {
   evt.preventDefault();
-  closePopup(popupEditProfile);
   profileName.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
+  closePopup();
 }
 
-function createCard(element) {
-  const cardPlace =  cardTemplate.querySelector('.place').cloneNode(true);
+function createCard(cardData) {
+  const cardPlace =  cardTemplateContent.cloneNode(true);
   const cardLike = cardPlace.querySelector('.place__like');
   const cardDelete = cardPlace.querySelector('.place__delete');
   const cardImage = cardPlace.querySelector('.place__image');
   const cardText = cardPlace.querySelector('.place__text');
   
-  cardImage.src = element.link;
-  cardImage.alt = element.name;
-  cardText.textContent = element.name;
+  cardImage.src = cardData.link;
+  cardImage.alt = cardData.name;
+  cardText.textContent = cardData.name;
 
-  cardImage.addEventListener('click', handleImageClick);
-  cardLike.addEventListener('click', handleLikeClick);
-  cardDelete.addEventListener('click', handleDeleteClick);
+  cardImage.addEventListener('click', () => handleImageClick(cardImage, cardText));
+  cardLike.addEventListener('click', () => handleLikeClick(cardLike));
+  cardDelete.addEventListener('click', () => handleDeleteClick(cardDelete));
 
   return cardPlace;
 }
 
-function renderCard (element) {
-  const card = createCard(element)
+function renderCard (cardData) {
+  const card = createCard(cardData)
   placesContainer.prepend(card);
 }
 
-function handleAddForm(evt) {
+function handleAddFormSubmit(evt) {
   evt.preventDefault(); 
-  closePopup(popupAddCard); 
 
   const cardNew = {
-    name: `${placeNameInput.value}`, 
-    link: `${placeLinkInput.value}`
+    name: placeNameInput.value, 
+    link: placeLinkInput.value
   }; 
-
+  
   renderCard(cardNew); 
-  } 
+  closePopup();
+  formAddCard.reset();
+} 
 
-  //заполнение инпутов данными из профиля при загрузке страницы - для корректной валидации формы при загрузке страницы и отображения активной кнопки
+//определение данных в форме для отображения активной кнопки "сохранить" при первом открытии попапа до его редактирования
 nameInput.value = profileName.textContent; 
 jobInput.value = profileDescription.textContent;
 
- buttonEditProfile.addEventListener('click', function () {
-  openPopup(popupEditProfile);
-  //заполнение инпутов данными из профиля при открытии попапа - для удаления вписанных, но не сохраненных значениях инпутов
+buttonEditProfile.addEventListener('click', function () {
   nameInput.value = profileName.textContent; 
   jobInput.value = profileDescription.textContent;
- });
-buttonCloseEditPopup.addEventListener('click', ()=> closePopup(popupEditProfile));
-formEditProfile.addEventListener('submit', handleEditForm);
+  openPopup(popupEditProfile);
+});
 
-buttonClosePopupImage.addEventListener('click', ()=> closePopup(popupImage));
+buttonCloseEditPopup.addEventListener('click', ()=> closePopup());
+formEditProfile.addEventListener('submit', handleEditFormSubmit);
+
+buttonClosePopupImage.addEventListener('click', ()=> closePopup());
 
 buttonAddCard.addEventListener('click', ()=> openPopup(popupAddCard));
-buttonCloseAddForm.addEventListener('click', ()=> closePopup(popupAddCard));
+buttonCloseAddForm.addEventListener('click', ()=> closePopup());
 
 cards.forEach(renderCard);
 
-formAddCard.addEventListener('submit', handleAddForm);
+formAddCard.addEventListener('submit', handleAddFormSubmit);
