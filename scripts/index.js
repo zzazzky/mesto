@@ -51,34 +51,34 @@ const placeLinkInput = popupAddCard.querySelector('.popup__input_content_place-l
 const cardTemplate = document.querySelector('.places__template').content;
 const cardTemplateContent = cardTemplate.querySelector('.place');
 
-function removeHandler() {
+function removeHandlerEscKeydown() {
   document.removeEventListener('keydown', handleEscKeydown);
 }
 
-function closePopup() {
-  document.querySelector('.popup_opened').classList.remove('popup_opened');
-  removeHandler();
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
+  removeHandlerEscKeydown();
 }
 
-function handleOverlayClick(evt) {
+function handleOverlayClick(evt, popup) {
   if (evt.target === evt.currentTarget) {
-    closePopup();
+    closePopup(popup);
   }
 }
 function handleEscKeydown(evt) {
   if (evt.key === 'Escape') {
-    closePopup();
+    const popup = document.querySelector('.popup_opened');
+    closePopup(popup);
   }
 }
 
-function setPopupListeners (popup) {
+function setPopupListeners() {
   document.addEventListener('keydown', handleEscKeydown);
-  popup.addEventListener('click', handleOverlayClick);
 }
 
 function openPopup(popup) {
   popup.classList.add('popup_opened');
-  setPopupListeners (popup);
+  setPopupListeners();
 }
 
 function handleImageClick(cardImage, cardText) {
@@ -93,16 +93,15 @@ function handleLikeClick(buttonLike) {
   buttonLike.classList.toggle('place__like_active');
 }
 
-function handleDeleteClick(buttonDelete) {
-  const deletedCard = buttonDelete.closest('.place');
-  deletedCard.remove();
+function handleDeleteClick(cardPlace) {
+  cardPlace.remove();
 }
 
 function handleEditFormSubmit(evt) {
   evt.preventDefault();
   profileName.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
-  closePopup();
+  closePopup(popupEditProfile);
 }
 
 function createCard(cardData) {
@@ -118,7 +117,7 @@ function createCard(cardData) {
 
   cardImage.addEventListener('click', () => handleImageClick(cardImage, cardText));
   cardLike.addEventListener('click', () => handleLikeClick(cardLike));
-  cardDelete.addEventListener('click', () => handleDeleteClick(cardDelete));
+  cardDelete.addEventListener('click', () => handleDeleteClick(cardPlace));
 
   return cardPlace;
 }
@@ -137,7 +136,7 @@ function handleAddFormSubmit(evt) {
   }; 
   
   renderCard(cardNew); 
-  closePopup();
+  closePopup(popupAddCard);
   formAddCard.reset();
 } 
 
@@ -151,14 +150,17 @@ buttonEditProfile.addEventListener('click', function () {
   openPopup(popupEditProfile);
 });
 
-buttonCloseEditPopup.addEventListener('click', ()=> closePopup());
+popupAddCard.addEventListener('click', (evt) => handleOverlayClick(evt, popupAddCard));
+popupEditProfile.addEventListener('click', (evt) => handleOverlayClick(evt, popupEditProfile));
+popupImage.addEventListener('click', (evt) => handleOverlayClick(evt, popupImage));
+
+buttonCloseEditPopup.addEventListener('click', ()=> closePopup(popupEditProfile));
 formEditProfile.addEventListener('submit', handleEditFormSubmit);
 
-buttonClosePopupImage.addEventListener('click', ()=> closePopup());
+buttonClosePopupImage.addEventListener('click', ()=> closePopup(popupImage));
 
 buttonAddCard.addEventListener('click', ()=> openPopup(popupAddCard));
-buttonCloseAddForm.addEventListener('click', ()=> closePopup());
+buttonCloseAddForm.addEventListener('click', ()=> closePopup(popupAddCard));
+formAddCard.addEventListener('submit', handleAddFormSubmit);
 
 cards.forEach(renderCard);
-
-formAddCard.addEventListener('submit', handleAddFormSubmit);
