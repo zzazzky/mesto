@@ -33,6 +33,19 @@ const placeLinkInput = popupAddCard.querySelector(
   ".popup__input_content_place-link"
 );
 
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+
+const formList = Array.from(
+  document.querySelectorAll(validationConfig.formSelector)
+);
+
 function removeHandlerEscKeydown() {
   document.removeEventListener("keydown", handleEscKeydown);
 }
@@ -70,9 +83,14 @@ function handleEditFormSubmit(evt) {
   closePopup(popupEditProfile);
 }
 
-function renderCard(cardData) {
+function createCard(cardData) {
   const card = new Card(cardData, ".places__template").createCard();
-  placesContainer.prepend(card);
+  return card;
+}
+
+function renderCard(cardData) {
+  const createdCard = createCard(cardData);
+  placesContainer.prepend(createdCard);
 }
 
 function handleAddFormSubmit(evt) {
@@ -121,19 +139,6 @@ buttonCloseAddForm.addEventListener("click", () => closePopup(popupAddCard));
 formAddCard.addEventListener("submit", handleAddFormSubmit);
 
 cardsList.forEach((cardData) => renderCard(cardData));
-
-const validationConfig = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
-};
-
-const formList = Array.from(
-  document.querySelectorAll(validationConfig.formSelector)
-);
 
 formList.forEach((formElement) => {
   const validator = new FormValidator(validationConfig, formElement);
