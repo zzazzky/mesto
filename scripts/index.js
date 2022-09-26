@@ -46,6 +46,8 @@ const formList = Array.from(
   document.querySelectorAll(validationConfig.formSelector)
 );
 
+const FormValidators = {};
+
 function removeHandlerEscKeydown() {
   document.removeEventListener("keydown", handleEscKeydown);
 }
@@ -53,6 +55,12 @@ function removeHandlerEscKeydown() {
 function closePopup(popup) {
   popup.classList.remove("popup_opened");
   removeHandlerEscKeydown();
+
+  if (popup.querySelector(".popup__form")) {
+    FormValidators[
+      popup.querySelector(".popup__form").getAttribute("name")
+    ].cleanInputs();
+  }
 }
 
 function handleOverlayClick(evt, popup) {
@@ -74,10 +82,14 @@ function setPopupListeners() {
 function openPopup(popup) {
   popup.classList.add("popup_opened");
   setPopupListeners();
+  if (popup.querySelector(".popup__form")) {
+    FormValidators[
+      popup.querySelector(".popup__form").getAttribute("name")
+    ].resetValidation();
+  }
 }
 
-function handleEditFormSubmit(evt) {
-  evt.preventDefault();
+function handleEditFormSubmit() {
   profileName.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
   closePopup(popupEditProfile);
@@ -93,9 +105,7 @@ function renderCard(cardData) {
   placesContainer.prepend(createdCard);
 }
 
-function handleAddFormSubmit(evt) {
-  evt.preventDefault();
-
+function handleAddFormSubmit() {
   const cardNew = {
     name: placeNameInput.value,
     link: placeLinkInput.value,
@@ -105,9 +115,6 @@ function handleAddFormSubmit(evt) {
   closePopup(popupAddCard);
   formAddCard.reset();
 }
-
-nameInput.value = profileName.textContent;
-jobInput.value = profileDescription.textContent;
 
 export { bigImage, bigCaption, openPopup, popupImage };
 
@@ -142,5 +149,10 @@ cardsList.forEach((cardData) => renderCard(cardData));
 
 formList.forEach((formElement) => {
   const validator = new FormValidator(validationConfig, formElement);
+
+  const formName = formElement.getAttribute("name");
+
+  FormValidators[formName] = validator;
+
   validator.enableValidation();
 });

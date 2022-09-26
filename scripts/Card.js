@@ -16,43 +16,41 @@ export default class Card {
     return cardTemplate;
   }
 
-  _handleImageClick(cardImage, cardText) {
-    bigImage.src = cardImage.src;
-    bigImage.alt = cardImage.alt;
-    bigCaption.textContent = cardText.textContent;
+  _handleImageClick() {
+    bigImage.src = this.cardImage.src;
+    bigImage.alt = this.cardImage.alt;
+    bigCaption.textContent = this.cardText.textContent;
 
     openPopup(popupImage);
   }
 
-  _handleLikeClick(buttonLike) {
-    buttonLike.classList.toggle("place__like_active");
+  _handleLikeClick() {
+    this.cardLike.classList.toggle("place__like_active");
   }
 
   _handleDeleteClick() {
     this.cardPlace.remove();
   }
 
-  _setEventListeners(cardImage, cardLike, cardDelete, cardText) {
-    cardImage.addEventListener("click", () =>
-      this._handleImageClick(cardImage, cardText)
-    );
-    cardLike.addEventListener("click", () => this._handleLikeClick(cardLike));
-    cardDelete.addEventListener("click", () => this._handleDeleteClick());
+  _setEventListeners() {
+    this.cardImage.addEventListener("click", () => this._handleImageClick());
+    this.cardLike.addEventListener("click", () => this._handleLikeClick());
+    this.cardDelete.addEventListener("click", () => this._handleDeleteClick());
   }
 
   createCard() {
     this.cardPlace = this._getTemplate();
 
-    const cardLike = this.cardPlace.querySelector(".place__like");
-    const cardDelete = this.cardPlace.querySelector(".place__delete");
-    const cardImage = this.cardPlace.querySelector(".place__image");
-    const cardText = this.cardPlace.querySelector(".place__text");
+    this.cardLike = this.cardPlace.querySelector(".place__like");
+    this.cardDelete = this.cardPlace.querySelector(".place__delete");
+    this.cardImage = this.cardPlace.querySelector(".place__image");
+    this.cardText = this.cardPlace.querySelector(".place__text");
 
-    cardImage.src = this._link;
-    cardImage.alt = this._name;
-    cardText.textContent = this._name;
+    this.cardImage.src = this._link;
+    this.cardImage.alt = this._name;
+    this.cardText.textContent = this._name;
 
-    this._setEventListeners(cardImage, cardLike, cardDelete, cardText);
+    this._setEventListeners();
 
     return this.cardPlace;
   }
