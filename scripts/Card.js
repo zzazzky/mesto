@@ -1,10 +1,9 @@
-import { bigImage, bigCaption, openPopup, popupImage } from "./index.js";
-
 export default class Card {
-  constructor(cardData, templateSelector) {
-    this._link = cardData.link;
-    this._name = cardData.name;
+  constructor(cardData, templateSelector, handleCardClick) {
+    this._link = cardData["place-link"];
+    this._name = cardData["place-name"];
     this._templateSelector = templateSelector;
+    this._handleCardClick = handleCardClick;
   }
 
   _getTemplate() {
@@ -15,17 +14,8 @@ export default class Card {
 
     return cardTemplate;
   }
-
-  _handleImageClick() {
-    bigImage.src = this.cardImage.src;
-    bigImage.alt = this.cardImage.alt;
-    bigCaption.textContent = this.cardText.textContent;
-
-    openPopup(popupImage);
-  }
-
   _handleLikeClick() {
-    this.cardLike.classList.toggle("place__like_active");
+    this._cardLike.classList.toggle("place__like_active");
   }
 
   _handleDeleteClick() {
@@ -33,22 +23,24 @@ export default class Card {
   }
 
   _setEventListeners() {
-    this.cardImage.addEventListener("click", () => this._handleImageClick());
-    this.cardLike.addEventListener("click", () => this._handleLikeClick());
-    this.cardDelete.addEventListener("click", () => this._handleDeleteClick());
+    this._cardImage.addEventListener("click", () => {
+      this._handleCardClick();
+    });
+    this._cardLike.addEventListener("click", () => this._handleLikeClick());
+    this._cardDelete.addEventListener("click", () => this._handleDeleteClick());
   }
 
   createCard() {
     this.cardPlace = this._getTemplate();
 
-    this.cardLike = this.cardPlace.querySelector(".place__like");
-    this.cardDelete = this.cardPlace.querySelector(".place__delete");
-    this.cardImage = this.cardPlace.querySelector(".place__image");
-    this.cardText = this.cardPlace.querySelector(".place__text");
+    this._cardLike = this.cardPlace.querySelector(".place__like");
+    this._cardDelete = this.cardPlace.querySelector(".place__delete");
+    this._cardImage = this.cardPlace.querySelector(".place__image");
+    this._cardText = this.cardPlace.querySelector(".place__text");
 
-    this.cardImage.src = this._link;
-    this.cardImage.alt = this._name;
-    this.cardText.textContent = this._name;
+    this._cardImage.src = this._link;
+    this._cardImage.alt = this._name;
+    this._cardText.textContent = this._name;
 
     this._setEventListeners();
 
