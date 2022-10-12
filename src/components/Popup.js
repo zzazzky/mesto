@@ -25,15 +25,13 @@ export default class Popup {
     }
   };
 
-  _setEventListeners() {
-    document.addEventListener("keydown", this._handleEscClose);
+  setEventListeners() {
     this._buttonClose.addEventListener("click", () => this.close());
     this._popup.addEventListener("click", evt => this._handleOverlayClick(evt));
   }
 
   open() {
     this._popup.classList.add("popup_opened");
-
-    this._setEventListeners();
+    document.addEventListener("keydown", this._handleEscClose);
   }
 }

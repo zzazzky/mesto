@@ -7,37 +7,39 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import Section from "../components/Section.js";
 
-export const userInfo = new UserInfo(".profile__name", ".profile__description");
+export const userInfo = new UserInfo({
+  nameSelector: ".profile__name",
+  jobSelector: ".profile__description",
+});
+
+const cardContainer = new Section(
+  {
+    items: cardsList,
+    renderer: cardData => {
+      const cardElement = createCard(cardData);
+      cardContainer.addItem(cardElement);
+    },
+  },
+  ".places__list"
+);
 
 export const popupImage = new PopupWithImage(".popup_type_picture");
 
-const popupEditProfile = new PopupWithForm(".popup_type_edit-profile", () => {
-  popupEditProfile._getInputValues();
-  userInfo.setUserInfo(
-    popupEditProfile.inputValues["profile-name"],
-    popupEditProfile.inputValues["profile-description"]
-  );
+const popupEditProfile = new PopupWithForm(
+  ".popup_type_edit-profile",
+  inputValues => {
+    userInfo.setUserInfo(
+      inputValues["profile-name"],
+      inputValues["profile-description"]
+    );
 
-  popupEditProfile.close();
-});
+    popupEditProfile.close();
+  }
+);
 
-const popupAddCard = new PopupWithForm(".popup_type_add-card", () => {
-  popupAddCard._getInputValues();
-  const cardElement = new Section(
-    {
-      items: [popupAddCard.inputValues],
-      renderer: cardData => {
-        const card = new Card(cardData, ".places__template", () => {
-          popupImage.open(card._name, card._link);
-        });
-        return card.createCard();
-      },
-    },
-    ".places__list"
-  );
-  cardElement.renderItems();
-  cardElement.elements.forEach(item => cardElementsList.addItem(item));
-
+const popupAddCard = new PopupWithForm(".popup_type_add-card", inputValues => {
+  const cardElement = createCard(inputValues);
+  cardContainer.addItem(cardElement);
   popupAddCard.close();
 });
 
@@ -59,24 +61,30 @@ const formList = Array.from(
 
 export const FormValidators = {};
 
-const cardElementsList = new Section(
-  {
-    items: cardsList,
-    renderer: cardData => {
-      const card = new Card(cardData, ".places__template", () => {
-        popupImage.open(card._name, card._link);
-      });
-      return card.createCard();
-    },
-  },
-  ".places__list"
-);
+const createCard = function (cardData) {
+  const card = new Card(cardData, ".places__template", () => {
+    popupImage.open(card.name, card.link);
+  });
+  const cardElement = card.createCard();
+  return cardElement;
+};
 
-cardElementsList.renderItems();
-cardElementsList.elements.forEach(item => cardElementsList.addItem(item));
+popupAddCard.setEventListeners();
+popupEditProfile.setEventListeners();
+popupImage.setEventListeners();
 
-buttonEditProfile.addEventListener("click", () => popupEditProfile.open());
+cardContainer.renderItems();
+
+buttonEditProfile.addEventListener("click", () => {
+  userInfo.getUserInfo();
+  popupEditProfile.inputList[0].value = userInfo.profileDate.name;
+  popupEditProfile.inputList[1].value = userInfo.profileDate.job;
+  FormValidators[popupEditProfile.form.getAttribute("name")].resetValidation();
+  popupEditProfile.open();
+});
+
 buttonAddCard.addEventListener("click", () => {
+  FormValidators[popupAddCard.form.getAttribute("name")].resetValidation();
   popupAddCard.open();
 });
 

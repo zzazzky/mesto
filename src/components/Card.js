@@ -1,7 +1,7 @@
 export default class Card {
   constructor(cardData, templateSelector, handleCardClick) {
-    this._link = cardData["place-link"];
-    this._name = cardData["place-name"];
+    this.link = cardData["place-link"];
+    this.name = cardData["place-name"];
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
   }
@@ -20,6 +20,7 @@ export default class Card {
 
   _handleDeleteClick() {
     this.cardPlace.remove();
+    this.cardPlace = null;
   }
 
   _setEventListeners() {
@@ -38,9 +39,9 @@ export default class Card {
     this._cardImage = this.cardPlace.querySelector(".place__image");
     this._cardText = this.cardPlace.querySelector(".place__text");
 
-    this._cardImage.src = this._link;
-    this._cardImage.alt = this._name;
-    this._cardText.textContent = this._name;
+    this._cardImage.src = this.link;
+    this._cardImage.alt = this.name;
+    this._cardText.textContent = this.name;
 
     this._setEventListeners();
 
