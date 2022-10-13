@@ -5,12 +5,12 @@ export default class UserInfo {
   }
 
   getUserInfo() {
-    this.profileDate = {
+    this.profileData = {
       name: this._name.textContent,
       job: this._job.textContent,
     };
 
-    return this.profileDate;
+    return this.profileData;
   }
 
   setUserInfo(name, job) {

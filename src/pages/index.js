@@ -59,7 +59,7 @@ const formList = Array.from(
   document.querySelectorAll(validationConfig.formSelector)
 );
 
-export const FormValidators = {};
+const formValidators = {};
 
 const createCard = function (cardData) {
   const card = new Card(cardData, ".places__template", () => {
@@ -69,6 +69,9 @@ const createCard = function (cardData) {
   return cardElement;
 };
 
+const nameInput = document.querySelector(".popup__input_content_name");
+const jobInput = document.querySelector(".popup__input_content_description");
+
 popupAddCard.setEventListeners();
 popupEditProfile.setEventListeners();
 popupImage.setEventListeners();
@@ -76,15 +79,15 @@ popupImage.setEventListeners();
 cardContainer.renderItems();
 
 buttonEditProfile.addEventListener("click", () => {
-  userInfo.getUserInfo();
-  popupEditProfile.inputList[0].value = userInfo.profileDate.name;
-  popupEditProfile.inputList[1].value = userInfo.profileDate.job;
-  FormValidators[popupEditProfile.form.getAttribute("name")].resetValidation();
+  const profileData = userInfo.getUserInfo();
+  nameInput.value = profileData.name;
+  jobInput.value = profileData.job;
+  formValidators[popupEditProfile.form.getAttribute("name")].resetValidation();
   popupEditProfile.open();
 });
 
 buttonAddCard.addEventListener("click", () => {
-  FormValidators[popupAddCard.form.getAttribute("name")].resetValidation();
+  formValidators[popupAddCard.form.getAttribute("name")].resetValidation();
   popupAddCard.open();
 });
 
@@ -93,7 +96,7 @@ formList.forEach(formElement => {
 
   const formName = formElement.getAttribute("name");
 
-  FormValidators[formName] = validator;
+  formValidators[formName] = validator;
 
   validator.enableValidation();
 });
