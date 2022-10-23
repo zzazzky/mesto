@@ -6,11 +6,14 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import Section from "../components/Section.js";
+import PopupWithButton from "../components/PopupWithButton";
 
 export const userInfo = new UserInfo({
   nameSelector: ".profile__name",
   jobSelector: ".profile__description",
 });
+
+const avatar = document.querySelector(".profile__avatar");
 
 const cardContainer = new Section(
   {
@@ -43,8 +46,22 @@ const popupAddCard = new PopupWithForm(".popup_type_add-card", inputValues => {
   popupAddCard.close();
 });
 
+const popupEditAvatar = new PopupWithForm(
+  ".popup_type_edit-avatar",
+  inputValues => {
+    avatar.src = inputValues["avatar-link"];
+    popupEditAvatar.close();
+  }
+);
+
+const popupDeleteCard = new PopupWithButton(".popup_type_delete-card", card => {
+  card.remove();
+  card = null;
+});
+
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const buttonAddCard = document.querySelector(".profile__add-button");
+const buttonEditAvatar = document.querySelector(".profile__avatar-edit-button");
 
 const validationConfig = {
   formSelector: ".popup__form",
@@ -62,20 +79,28 @@ const formList = Array.from(
 const formValidators = {};
 
 const createCard = function (cardData) {
-  const card = new Card(cardData, ".places__template", () => {
-    popupImage.open(card.name, card.link);
-  });
+  const card = new Card(
+    cardData,
+    ".places__template",
+    () => {
+      popupImage.open(card.name, card.link);
+    },
+    () => {
+      popupDeleteCard.open(card.cardPlace);
+    }
+  );
   const cardElement = card.createCard();
   return cardElement;
 };
 
-const nameInput = document.querySelector(".popup__input_content_name");
+const nameInput = document.querySelector(".popup__input_content_profile-name");
 const jobInput = document.querySelector(".popup__input_content_description");
 
 popupAddCard.setEventListeners();
 popupEditProfile.setEventListeners();
 popupImage.setEventListeners();
-
+popupEditAvatar.setEventListeners();
+popupDeleteCard.setEventListeners();
 cardContainer.renderItems();
 
 buttonEditProfile.addEventListener("click", () => {
@@ -89,6 +114,11 @@ buttonEditProfile.addEventListener("click", () => {
 buttonAddCard.addEventListener("click", () => {
   formValidators[popupAddCard.form.getAttribute("name")].resetValidation();
   popupAddCard.open();
+});
+
+buttonEditAvatar.addEventListener("click", () => {
+  formValidators[popupEditAvatar.form.getAttribute("name")].resetValidation();
+  popupEditAvatar.open();
 });
 
 formList.forEach(formElement => {

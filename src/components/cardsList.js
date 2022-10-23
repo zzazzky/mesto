@@ -7,27 +7,27 @@ const sachalin = new URL("../images/place__sachalin.jpg", import.meta.url);
 
 export const cardsList = [
   {
-    "place-name": "Балтийское море",
-    "place-link": baltMore,
+    name: "Балтийское море",
+    link: baltMore,
   },
   {
-    "place-name": "Домбай",
-    "place-link": dombay,
+    name: "Домбай",
+    link: dombay,
   },
   {
-    "place-name": "Эльбрус",
-    "place-link": elbrus,
+    name: "Эльбрус",
+    link: elbrus,
   },
   {
-    "place-name": "Камчатский край",
-    "place-link": kamchatka,
+    name: "Камчатский край",
+    link: kamchatka,
   },
   {
-    "place-name": "Карачаево-Черкессия",
-    "place-link": karachaevsk,
+    name: "Карачаево-Черкессия",
+    link: karachaevsk,
   },
   {
-    "place-name": "Сахалин",
-    "place-link": sachalin,
+    name: "Сахалин",
+    link: sachalin,
   },
 ];
