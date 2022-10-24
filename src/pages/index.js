@@ -6,7 +6,17 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import Section from "../components/Section.js";
-import PopupWithButton from "../components/PopupWithButton";
+import PopupWithButton from "../components/PopupWithButton.js";
+import Api from "../components/Api.js";
+
+const api = new Api({
+  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-52",
+  headers: {
+    authorization: "f244abf0-7dcd-442d-a985-b4b4e092fdb8",
+    "Content-Type": "application/json",
+  },
+});
+console.log(api.authorization);
 
 export const userInfo = new UserInfo({
   nameSelector: ".profile__name",

@@ -1,33 +1,10 @@
-const baltMore = new URL("../images/place__balt-more.jpg", import.meta.url);
-const dombay = new URL("../images/place__dombay.jpg", import.meta.url);
-const elbrus = new URL("../images/place__elbrus.jpg", import.meta.url);
-const kamchatka = new URL("../images/place__kamchatka.jpg", import.meta.url);
-const karachaevsk = new URL("../images/place__karachevsk.jpg", import.meta.url);
-const sachalin = new URL("../images/place__sachalin.jpg", import.meta.url);
+const elbrus = new URL(
+  "https://images.unsplash.com/photo-1633418452544-2db414f8bb85?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=327&q=80"
+);
 
 export const cardsList = [
   {
-    name: "Балтийское море",
-    link: baltMore,
-  },
-  {
-    name: "Домбай",
-    link: dombay,
-  },
-  {
     name: "Эльбрус",
     link: elbrus,
-  },
-  {
-    name: "Камчатский край",
-    link: kamchatka,
-  },
-  {
-    name: "Карачаево-Черкессия",
-    link: karachaevsk,
-  },
-  {
-    name: "Сахалин",
-    link: sachalin,
   },
 ];
