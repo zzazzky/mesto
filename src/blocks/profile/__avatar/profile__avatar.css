@@ -4,4 +4,5 @@
   height: 120px;
   border-radius: 120px;
   grid-area: avatar;
+  object-fit: cover;
 }

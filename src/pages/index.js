@@ -1,5 +1,4 @@
 import "./index.css";
-import { cardsList } from "../components/cardsList.js";
 import Card from "../components/Card.js";
 import FormValidator from "../components/FormValidator.js";
 import PopupWithImage from "../components/PopupWithImage.js";
@@ -16,22 +15,24 @@ const api = new Api({
     "Content-Type": "application/json",
   },
 });
-console.log(api.authorization);
 
 export const userInfo = new UserInfo({
   nameSelector: ".profile__name",
   jobSelector: ".profile__description",
+  avatarSelector: ".profile__avatar",
 });
 
-const avatar = document.querySelector(".profile__avatar");
+function fillUserInfo() {
+  api.getUserInfo().then(res => userInfo.setUserInfo(res));
+}
 
 const cardContainer = new Section(
-  {
-    items: cardsList,
-    renderer: cardData => {
-      const cardElement = createCard(cardData);
-      cardContainer.addItem(cardElement);
-    },
+  api.getInitialCards().then(function (res) {
+    return res;
+  }),
+  cardData => {
+    const cardElement = createCard(cardData);
+    cardContainer.addItem(cardElement);
   },
   ".places__list"
 );
@@ -97,8 +98,16 @@ const createCard = function (cardData) {
     },
     () => {
       popupDeleteCard.open(card.cardPlace);
+    },
+    () => {
+      if (card.ownerId === userInfo.id) {
+        return true;
+      } else {
+        return false;
+      }
     }
   );
+
   const cardElement = card.createCard();
   return cardElement;
 };
@@ -130,6 +139,8 @@ buttonEditAvatar.addEventListener("click", () => {
   formValidators[popupEditAvatar.form.getAttribute("name")].resetValidation();
   popupEditAvatar.open();
 });
+
+fillUserInfo();
 
 formList.forEach(formElement => {
   const validator = new FormValidator(validationConfig, formElement);

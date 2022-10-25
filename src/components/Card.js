@@ -1,13 +1,20 @@
 export default class Card {
-  constructor(cardData, templateSelector, handleCardClick, handleDeleteClick) {
+  constructor(
+    cardData,
+    templateSelector,
+    handleCardClick,
+    handleDeleteClick,
+    checkOwnerId
+  ) {
     this.link = cardData["link"];
     this.name = cardData["name"];
-    /*this._id = cardData["_id"];
+    this._id = cardData["_id"];
     this.likes = cardData["likes"];
-    this._ownerId = cardData.owner._id;*/
+    this.ownerId = cardData.owner._id;
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
     this._handleDeleteClick = handleDeleteClick;
+    this._checkOwnerId = checkOwnerId;
   }
 
   _getTemplate() {
@@ -27,7 +34,11 @@ export default class Card {
       this._handleCardClick();
     });
     this._cardLike.addEventListener("click", () => this._handleLikeClick());
-    this._cardDelete.addEventListener("click", () => this._handleDeleteClick());
+    if (this._cardDelete) {
+      this._cardDelete.addEventListener("click", () =>
+        this._handleDeleteClick()
+      );
+    }
   }
 
   createCard() {
@@ -37,6 +48,10 @@ export default class Card {
     this._cardDelete = this.cardPlace.querySelector(".place__delete");
     this._cardImage = this.cardPlace.querySelector(".place__image");
     this._cardText = this.cardPlace.querySelector(".place__text");
+
+    if (!this._checkOwnerId()) {
+      this._cardDelete.remove();
+    }
 
     this._cardImage.src = this.link;
     this._cardImage.alt = this.name;
