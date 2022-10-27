@@ -104,7 +104,15 @@ export default class Api {
       headers: {
         authorization: this._authorization,
       },
-    });
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        return Promise.reject(`Ошибка: ${res.status}`);
+      }
+    })
+    .catch(err => console.log(err));
   }
 
   setCardLike(cardId) {
