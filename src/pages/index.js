@@ -27,7 +27,7 @@ function fillUserInfo() {
 }
 
 const cardContainer = new Section(
-  api.getInitialCards().then(function (res) {
+  api.getInitialCards().then(res => {
     return res;
   }),
   cardData => {
@@ -42,33 +42,46 @@ export const popupImage = new PopupWithImage(".popup_type_picture");
 const popupEditProfile = new PopupWithForm(
   ".popup_type_edit-profile",
   inputValues => {
-    userInfo.setUserInfo(
-      inputValues["profile-name"],
-      inputValues["profile-description"]
-    );
-
-    popupEditProfile.close();
+    api
+      .editProfile({
+        name: inputValues["profile-name"],
+        about: inputValues["profile-description"],
+      })
+      .then(fillUserInfo())
+      .then(popupEditProfile.close())
+      .finally(popupEditProfile.switchButtonText());
   }
 );
 
 const popupAddCard = new PopupWithForm(".popup_type_add-card", inputValues => {
-  const cardElement = createCard(inputValues);
-  cardContainer.addItem(cardElement);
-  popupAddCard.close();
+  api
+    .addCard(inputValues)
+    .then(res => createCard(res))
+    .then(res => cardContainer.addItem(res))
+    .then(popupAddCard.close())
+    .finally(popupAddCard.switchButtonText());
 });
 
 const popupEditAvatar = new PopupWithForm(
   ".popup_type_edit-avatar",
   inputValues => {
-    avatar.src = inputValues["avatar-link"];
-    popupEditAvatar.close();
+    api
+      .editAvatar(inputValues["avatar-link"])
+      .then(fillUserInfo())
+      .then(popupEditAvatar.close())
+      .finally(popupEditAvatar.switchButtonText());
   }
 );
 
-const popupDeleteCard = new PopupWithButton(".popup_type_delete-card", card => {
-  card.remove();
-  card = null;
-});
+const popupDeleteCard = new PopupWithButton(
+  ".popup_type_delete-card",
+  (cardId, card) => {
+    api
+      .deleteCard(cardId)
+      .then(card.deleteCard())
+      .then(popupDeleteCard.close());
+  }
+);
 
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const buttonAddCard = document.querySelector(".profile__add-button");
@@ -97,10 +110,33 @@ const createCard = function (cardData) {
       popupImage.open(card.name, card.link);
     },
     () => {
-      popupDeleteCard.open(card.cardPlace);
+      popupDeleteCard.open(card.id, card);
+    },
+    (cardId, card) => {
+      api
+        .setCardLike(cardId)
+        .then(res => {
+          card.renewLikesCounter(res.likes);
+        })
+        .then(card.toggleLike());
+    },
+    (cardId, card) => {
+      api
+        .removeCardLike(cardId)
+        .then(res => {
+          card.renewLikesCounter(res.likes);
+        })
+        .then(card.toggleLike());
     },
     () => {
       if (card.ownerId === userInfo.id) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    () => {
+      if (card.likes.some(likeData => likeData._id === userInfo.id)) {
         return true;
       } else {
         return false;

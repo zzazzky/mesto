@@ -9,7 +9,7 @@ export default class PopupWithButton extends Popup {
 
   _handleEnterClose = evt => {
     if (evt.key === "Enter") {
-      this._handleConfirm;
+      this._handleConfirm(this._cardId);
       this.close();
     }
   };
@@ -18,18 +18,15 @@ export default class PopupWithButton extends Popup {
     super.setEventListeners();
     this._buttonConfirm.addEventListener("click", evt => {
       evt.preventDefault();
-      this._handleConfirm(this._card);
+      this._handleConfirm(this._cardId, this._card);
       this.close();
     });
   }
 
-  open(card) {
+  open(cardId, card) {
     super.open();
     document.addEventListener("keydown", this._handleEnterClose);
+    this._cardId = cardId;
     this._card = card;
-  }
-
-  close() {
-    super.close();
   }
 }
