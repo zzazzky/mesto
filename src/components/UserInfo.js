@@ -14,11 +14,21 @@ export default class UserInfo {
     return this.profileData;
   }
 
+  setProfileDescription({name, about}) {
+    this._name.textContent = name;
+    this._job.textContent = about;
+  }
+
+  setAvatar(avatarLink) {
+    this._avatar.src = avatarLink;
+  }
+
   setUserInfo(userData) {
-    this._name.textContent = userData.name;
-    this._job.textContent = userData.about;
+    this.setProfileDescription({name: userData.name, about: userData.about});
+    this.setAvatar(userData.avatar);
     this.id = userData._id;
-    this._avatar.src = userData.avatar;
     this.cohort = userData.cohort;
   }
+
+
 }

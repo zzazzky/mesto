@@ -16,70 +16,72 @@ const api = new Api({
   },
 });
 
-export const userInfo = new UserInfo({
-  nameSelector: ".profile__name",
-  jobSelector: ".profile__description",
-  avatarSelector: ".profile__avatar",
-});
-
-function fillUserInfo() {
-  api.getUserInfo().then(res => userInfo.setUserInfo(res));
-}
-
 const cardContainer = new Section(
-  api.getInitialCards().then(res => {
-    return res;
-  }),
-  cardData => {
+    (cardData) => {
     const cardElement = createCard(cardData);
     cardContainer.addItem(cardElement);
   },
   ".places__list"
 );
 
-export const popupImage = new PopupWithImage(".popup_type_picture");
+const userInfo = new UserInfo({
+  nameSelector: ".profile__name",
+  jobSelector: ".profile__description",
+  avatarSelector: ".profile__avatar",
+});
+
+function initialRender() {
+  Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([userData, cards]) => {
+    userInfo.setUserInfo(userData);
+    cardContainer.renderItems(cards);
+  })
+  .catch(err => console.log(err)); 
+}
+
+const popupImage = new PopupWithImage(".popup_type_picture");
 
 const popupEditProfile = new PopupWithForm(
   ".popup_type_edit-profile",
   inputValues => {
-    api
-      .editProfile({
+    api.editProfile({
         name: inputValues["profile-name"],
         about: inputValues["profile-description"],
       })
-      .then(fillUserInfo())
-      .then(popupEditProfile.close())
-      .finally(popupEditProfile.switchButtonText());
+      .then((res) => userInfo.setProfileDescription(res))
+      .then(() => popupEditProfile.close())
+      .catch(err => console.log(err))
+      .finally(() => popupEditProfile.switchButtonText());
   }
 );
 
 const popupAddCard = new PopupWithForm(".popup_type_add-card", inputValues => {
-  api
-    .addCard(inputValues)
+  api.addCard(inputValues)
     .then(res => createCard(res))
     .then(res => cardContainer.addItem(res))
-    .then(popupAddCard.close())
-    .finally(popupAddCard.switchButtonText());
+    .then(() => popupAddCard.close())
+    .catch(err => console.log(err))
+    .finally(() => popupAddCard.switchButtonText());
 });
 
 const popupEditAvatar = new PopupWithForm(
   ".popup_type_edit-avatar",
   inputValues => {
-    api
-      .editAvatar(inputValues["avatar-link"])
-      .then(fillUserInfo())
-      .then(popupEditAvatar.close())
-      .finally(popupEditAvatar.switchButtonText());
+    api.editAvatar(inputValues["avatar-link"])
+      .then((res) => userInfo.setAvatar(res.avatar))
+      .then(() => popupEditAvatar.close())
+      .catch(err => console.log(err))
+      .finally(() => popupEditAvatar.switchButtonText());
   }
 );
 
 const popupDeleteCard = new PopupWithButton(
   ".popup_type_delete-card",
   (cardId, card) => {
-    api
-      .deleteCard(cardId)
-      .then(card.deleteCard())
-      .then(popupDeleteCard.close());
+    api.deleteCard(cardId)
+      .then(() => card.deleteCard())
+      .then(() => popupDeleteCard.close())
+      .catch(err => console.log(err)); 
   }
 );
 
@@ -113,20 +115,20 @@ const createCard = function (cardData) {
       popupDeleteCard.open(card.id, card);
     },
     (cardId, card) => {
-      api
-        .setCardLike(cardId)
+      api.setCardLike(cardId)
         .then(res => {
           card.renewLikesCounter(res.likes);
         })
-        .then(card.toggleLike());
+        .then(() => card.toggleLike())
+        .catch(err => console.log(err)); 
     },
     (cardId, card) => {
-      api
-        .removeCardLike(cardId)
+      api.removeCardLike(cardId)
         .then(res => {
           card.renewLikesCounter(res.likes);
         })
-        .then(card.toggleLike());
+        .then(() => card.toggleLike())
+        .catch(err => console.log(err)); 
     },
     () => {
       if (card.ownerId === userInfo.id) {
@@ -151,12 +153,13 @@ const createCard = function (cardData) {
 const nameInput = document.querySelector(".popup__input_content_profile-name");
 const jobInput = document.querySelector(".popup__input_content_description");
 
+initialRender();
+
 popupAddCard.setEventListeners();
 popupEditProfile.setEventListeners();
 popupImage.setEventListeners();
 popupEditAvatar.setEventListeners();
 popupDeleteCard.setEventListeners();
-cardContainer.renderItems();
 
 buttonEditProfile.addEventListener("click", () => {
   const profileData = userInfo.getUserInfo();
@@ -176,7 +179,6 @@ buttonEditAvatar.addEventListener("click", () => {
   popupEditAvatar.open();
 });
 
-fillUserInfo();
 
 formList.forEach(formElement => {
   const validator = new FormValidator(validationConfig, formElement);
